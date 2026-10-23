@@ -175,6 +175,22 @@ def write_csv(path, rows, fields):
                           for k in fields} for row in rows)
 
 
+def audit_records(records):
+    """Apply the same cohort rules in the audit and feature preparation."""
+    audited = []
+    for record in records:
+        derived = endpoint(record)
+        time = derived["time_from_mri_days"]
+        positive = time is not None and time > 0
+        non_m1 = record["presentation"] == 0 and record["stage_m"] in (0, -1)
+        strict = non_m1 and record["stage_m"] == 0 and positive
+        reviewed = not (set(derived["flags"]) & BLOCKING_FLAGS)
+        audited.append(record | derived | {"strict_m0": strict,
+            "extended_non_m1": non_m1 and positive,
+            "passes_outcome_qc": strict and reviewed})
+    return audited
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=Path("data/raw/duke"))
@@ -193,17 +209,7 @@ def main():
         if ids != clinical_ids:
             raise ValueError(f"Patient IDs do not match: {name}")
 
-    audited = []
-    for record in records:
-        derived = endpoint(record)
-        time = derived["time_from_mri_days"]
-        positive = time is not None and time > 0
-        non_m1 = record["presentation"] == 0 and record["stage_m"] in (0, -1)
-        strict = non_m1 and record["stage_m"] == 0 and positive
-        reviewed = not (set(derived["flags"]) & BLOCKING_FLAGS)
-        audited.append(record | derived | {"strict_m0": strict,
-            "extended_non_m1": non_m1 and positive,
-            "passes_outcome_qc": strict and reviewed})
+    audited = audit_records(records)
 
     strict = [r for r in audited if r["strict_m0"]]
     reviewed = [r for r in audited if r["passes_outcome_qc"]]

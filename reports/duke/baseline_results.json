@@ -1,0 +1,915 @@
+{
+  "status": "exploratory_cause_specific_ranking_only",
+  "inputs": {
+    "status": "exploratory_cause_specific_ranking_only",
+    "seed": 20261023,
+    "n_folds": 5,
+    "patients": 674,
+    "distant_events": 47,
+    "feature_allowlist": [
+      "age_mri_years",
+      "log1p_tumor_volume_mm3"
+    ],
+    "volume_source_column": "Volume_cu_mm_Tumor",
+    "volume_unit": "mm^3 as labelled by publisher; not independently recomputed",
+    "volume": {
+      "observed": 673,
+      "missing": 1,
+      "minimum": 25.0775091,
+      "median": 2627.567047072,
+      "maximum": 158651.256304232
+    },
+    "age_range_years": [
+      21.809719370294317,
+      89.46475017111567
+    ],
+    "source_sha256": {
+      "Clinical_and_Other_Features.xlsx": "8ef0945c9f7513acd2d9c6e8866d98f2234dd78443110d9496c24a82dbbc7e6f",
+      "Imaging_Features.xlsx": "371e7aec937ccf7cff01bc3c66063ce22d9699d3d3f8c6ac0dcee6728826682d"
+    },
+    "prepared_sha256": {
+      "features.csv": "5fce65e933d30c276353222a1a4e9fac9fd70c91596f66cdbde14c736d6dd43c",
+      "outcomes.csv": "fd492cee6fb3190a359437b5766ec9e699512b85d9c59e708203e44aeca89d47",
+      "folds.csv": "02fc3078d89515c16fd9978e7d3ea4b1cf75e68d634ffbf89317c8f30e427c38"
+    },
+    "folds": [
+      {
+        "fold": 0,
+        "patients": 135,
+        "distant_events": 9,
+        "distant_events_before_3y": 6
+      },
+      {
+        "fold": 1,
+        "patients": 135,
+        "distant_events": 9,
+        "distant_events_before_3y": 7
+      },
+      {
+        "fold": 2,
+        "patients": 135,
+        "distant_events": 10,
+        "distant_events_before_3y": 5
+      },
+      {
+        "fold": 3,
+        "patients": 135,
+        "distant_events": 10,
+        "distant_events_before_3y": 8
+      },
+      {
+        "fold": 4,
+        "patients": 134,
+        "distant_events": 9,
+        "distant_events_before_3y": 4
+      }
+    ],
+    "source_definitions": [
+      "https://www.nature.com/articles/s41416-018-0185-8",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6176866/"
+    ],
+    "missing_value_policy": "No global imputation; training-fold median after log1p",
+    "selection": "strict M0, positive follow-up, no blocking outcome/surgery flags"
+  },
+  "configuration": {
+    "models": {
+      "age": [
+        "age_mri_years"
+      ],
+      "age_volume": [
+        "age_mri_years",
+        "log1p_tumor_volume_mm3"
+      ]
+    },
+    "alpha": 0,
+    "ties": "efron",
+    "horizon_days": 1095.75,
+    "death_handling": "censor at death if ascertained disease-free until death; otherwise last DR-free assessment",
+    "aggregation": "Harrell: within-fold pair totals; IPCW: equal-fold mean; no cross-fold pairs"
+  },
+  "software": {
+    "scikit-survival": "0.28.0",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pandas": "3.1.0",
+    "openpyxl": "3.1.5"
+  },
+  "python": "3.12.15",
+  "script_sha256": {
+    "run_duke_baseline.py": "8e761d9ed62633257bc84f3a9ec9eb932569b9948027b8dbd8df837e9fffc5f3",
+    "prepare_duke_baseline.py": "314b6bd2f452db6d2746c63dc97e9835a68c03e646eff5137c940cdc881cdb9a",
+    "audit_duke.py": "0cc4a7f6f681cd2557610c4560e55647d848bfce281ae00935029f12e683ec17"
+  },
+  "scenarios": {
+    "primary": {
+      "name": "primary",
+      "patients": 674,
+      "distant_events": 47,
+      "models": {
+        "age": {
+          "features": [
+            "age_mri_years"
+          ],
+          "folds": [
+            {
+              "fold": 0,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 53.24572210814511
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.706265182944556
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.376090773612122
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.2507920020517302
+              },
+              "harrell": {
+                "cindex": 0.4953027139874739,
+                "concordant": 474,
+                "discordant": 483,
+                "tied_risk": 1,
+                "tied_time": 0,
+                "comparable_pairs": 958
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 377,
+                "g_train_at_horizon": 0.7367675063240198,
+                "cindex": 0.5676834750127281,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 1,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.74469541409993
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.18879106617446
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.107368606734035
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.17639394662833047
+              },
+              "harrell": {
+                "cindex": 0.5598243688254665,
+                "concordant": 510,
+                "discordant": 401,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 911
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 382,
+                "g_train_at_horizon": 0.7445542470924339,
+                "cindex": 0.5797321688047313,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 2,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 52.16153319644079
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.007529089664615
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.220769418557053
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.2026669469943081
+              },
+              "harrell": {
+                "cindex": 0.5825688073394495,
+                "concordant": 508,
+                "discordant": 364,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 872
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 376,
+                "g_train_at_horizon": 0.7354895004399682,
+                "cindex": 0.7194245418090841,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 3,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 53.1854893908282
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.27057610425167
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.52750949253923
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.13769175022621374
+              },
+              "harrell": {
+                "cindex": 0.5025380710659898,
+                "concordant": 495,
+                "discordant": 490,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 985
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 384,
+                "g_train_at_horizon": 0.7467427331365708,
+                "cindex": 0.4873680084895499,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 4,
+              "train_patients": 540,
+              "test_patients": 134,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.3668720054757
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.0662864096129
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.195717621838979
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.09534810173401088
+              },
+              "harrell": {
+                "cindex": 0.5706134094151213,
+                "concordant": 400,
+                "discordant": 301,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 701
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 381,
+                "g_train_at_horizon": 0.7466569421437191,
+                "cindex": 0.5336784609878374,
+                "unavailable_reason": null
+              }
+            }
+          ],
+          "aggregate": {
+            "harrell_within_fold_pairs": 0.5393042692568331,
+            "comparable_pairs": 4427,
+            "harrell_fold_mean": 0.5421694741267002,
+            "harrell_fold_range": [
+              0.4953027139874739,
+              0.5825688073394495
+            ],
+            "ipcw_3y_fold_mean": 0.5775773310207861,
+            "ipcw_3y_available_folds": 5
+          }
+        },
+        "age_volume": {
+          "features": [
+            "age_mri_years",
+            "log1p_tumor_volume_mm3"
+          ],
+          "folds": [
+            {
+              "fold": 0,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 53.24572210814511,
+                "log1p_tumor_volume_mm3": 7.877893943195314
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.706265182944556,
+                "log1p_tumor_volume_mm3": 7.864123072394874
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.376090773612122,
+                "log1p_tumor_volume_mm3": 1.5579465174388591
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.05004563910027135,
+                "log1p_tumor_volume_mm3": 0.8028536716185801
+              },
+              "harrell": {
+                "cindex": 0.6440501043841336,
+                "concordant": 617,
+                "discordant": 341,
+                "tied_risk": 0,
+                "tied_time": 0,
+                "comparable_pairs": 958
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 377,
+                "g_train_at_horizon": 0.7367675063240198,
+                "cindex": 0.6241910292212963,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 1,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.74469541409993,
+                "log1p_tumor_volume_mm3": 7.812774489297269
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.18879106617446,
+                "log1p_tumor_volume_mm3": 7.862992493961284
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.107368606734035,
+                "log1p_tumor_volume_mm3": 1.5641917236982947
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.03888908861899274,
+                "log1p_tumor_volume_mm3": 0.6182385564617328
+              },
+              "harrell": {
+                "cindex": 0.827661909989023,
+                "concordant": 754,
+                "discordant": 157,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 911
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 382,
+                "g_train_at_horizon": 0.7445542470924339,
+                "cindex": 0.8078084299323672,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 2,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 52.16153319644079,
+                "log1p_tumor_volume_mm3": 7.905532280321857
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.007529089664615,
+                "log1p_tumor_volume_mm3": 7.883082673520196
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.220769418557053,
+                "log1p_tumor_volume_mm3": 1.5613846427593445
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.03255792837018385,
+                "log1p_tumor_volume_mm3": 0.7057323221550688
+              },
+              "harrell": {
+                "cindex": 0.6731651376146789,
+                "concordant": 587,
+                "discordant": 285,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 872
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 376,
+                "g_train_at_horizon": 0.7354895004399682,
+                "cindex": 0.5846005961021239,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 3,
+              "train_patients": 539,
+              "test_patients": 135,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 53.1854893908282,
+                "log1p_tumor_volume_mm3": 7.85943728567656
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.27057610425167,
+                "log1p_tumor_volume_mm3": 7.879759294075829
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.52750949253923,
+                "log1p_tumor_volume_mm3": 1.5836094990683622
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": 0.0260984412332072,
+                "log1p_tumor_volume_mm3": 0.7139301464995537
+              },
+              "harrell": {
+                "cindex": 0.6913705583756345,
+                "concordant": 681,
+                "discordant": 304,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 985
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 384,
+                "g_train_at_horizon": 0.7467427331365708,
+                "cindex": 0.6677362522435997,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 4,
+              "train_patients": 540,
+              "test_patients": 134,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.3668720054757,
+                "log1p_tumor_volume_mm3": 7.908721616955783
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.0662864096129,
+                "log1p_tumor_volume_mm3": 7.852691695667907
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.195717621838979,
+                "log1p_tumor_volume_mm3": 1.5619075579322446
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": 0.11205155499215992,
+                "log1p_tumor_volume_mm3": 0.8877531777262518
+              },
+              "harrell": {
+                "cindex": 0.6034236804564908,
+                "concordant": 423,
+                "discordant": 278,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 701
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 381,
+                "g_train_at_horizon": 0.7466569421437191,
+                "cindex": 0.6432234978855818,
+                "unavailable_reason": null
+              }
+            }
+          ],
+          "aggregate": {
+            "harrell_within_fold_pairs": 0.6916647842782923,
+            "comparable_pairs": 4427,
+            "harrell_fold_mean": 0.6879342781639922,
+            "harrell_fold_range": [
+              0.6034236804564908,
+              0.827661909989023
+            ],
+            "ipcw_3y_fold_mean": 0.6655119610769937,
+            "ipcw_3y_available_folds": 5
+          }
+        }
+      }
+    },
+    "exclude_death_gap": {
+      "name": "exclude_death_gap",
+      "patients": 665,
+      "distant_events": 47,
+      "models": {
+        "age": {
+          "features": [
+            "age_mri_years"
+          ],
+          "folds": [
+            {
+              "fold": 0,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 53.181382614647504
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.62968509569612
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.387239907228897
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.24709587853325685
+              },
+              "harrell": {
+                "cindex": 0.4953027139874739,
+                "concordant": 474,
+                "discordant": 483,
+                "tied_risk": 1,
+                "tied_time": 0,
+                "comparable_pairs": 958
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 375,
+                "g_train_at_horizon": 0.7428548335499422,
+                "cindex": 0.5675605098736456,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 1,
+              "train_patients": 531,
+              "test_patients": 134,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.38329911019849
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.05123158170177
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.067891006334627
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.1727462058809689
+              },
+              "harrell": {
+                "cindex": 0.5575221238938053,
+                "concordant": 504,
+                "discordant": 400,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 904
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 381,
+                "g_train_at_horizon": 0.7540539817047598,
+                "cindex": 0.577796533289861,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 2,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 51.92060232717317
+              },
+              "scaler_train_means": {
+                "age_mri_years": 52.86707528575031
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.192845659843398
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.19711039236114017
+              },
+              "harrell": {
+                "cindex": 0.582089552238806,
+                "concordant": 507,
+                "discordant": 364,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 871
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 374,
+                "g_train_at_horizon": 0.7415150595334811,
+                "cindex": 0.7192222521459858,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 3,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 53.14031485284052
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.15217201113667
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.49427605437878
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.1340916830277718
+              },
+              "harrell": {
+                "cindex": 0.5005107252298263,
+                "concordant": 490,
+                "discordant": 489,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 979
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 382,
+                "g_train_at_horizon": 0.7529059328312774,
+                "cindex": 0.4850325750535147,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 4,
+              "train_patients": 533,
+              "test_patients": 132,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.26557152635181
+              },
+              "scaler_train_means": {
+                "age_mri_years": 52.933997506141544
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.162152245430205
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.0934011504767009
+              },
+              "harrell": {
+                "cindex": 0.5695652173913044,
+                "concordant": 393,
+                "discordant": 297,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 690
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 380,
+                "g_train_at_horizon": 0.7546821839162238,
+                "cindex": 0.5348030433177001,
+                "unavailable_reason": null
+              }
+            }
+          ],
+          "aggregate": {
+            "harrell_within_fold_pairs": 0.5380508859609269,
+            "comparable_pairs": 4402,
+            "harrell_fold_mean": 0.5409980665482432,
+            "harrell_fold_range": [
+              0.4953027139874739,
+              0.582089552238806
+            ],
+            "ipcw_3y_fold_mean": 0.5768829827361415,
+            "ipcw_3y_available_folds": 5
+          }
+        },
+        "age_volume": {
+          "features": [
+            "age_mri_years",
+            "log1p_tumor_volume_mm3"
+          ],
+          "folds": [
+            {
+              "fold": 0,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 53.181382614647504,
+                "log1p_tumor_volume_mm3": 7.8344019679716075
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.62968509569612,
+                "log1p_tumor_volume_mm3": 7.851207260727532
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.387239907228897,
+                "log1p_tumor_volume_mm3": 1.558445672498596
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.04682958199765603,
+                "log1p_tumor_volume_mm3": 0.807106020399641
+              },
+              "harrell": {
+                "cindex": 0.6430062630480167,
+                "concordant": 616,
+                "discordant": 342,
+                "tied_risk": 0,
+                "tied_time": 0,
+                "comparable_pairs": 958
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 375,
+                "g_train_at_horizon": 0.7428548335499422,
+                "cindex": 0.6228491465428724,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 1,
+              "train_patients": 531,
+              "test_patients": 134,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.38329911019849,
+                "log1p_tumor_volume_mm3": 7.80416706108527
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.05123158170177,
+                "log1p_tumor_volume_mm3": 7.857542633760036
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.067891006334627,
+                "log1p_tumor_volume_mm3": 1.5615856523261142
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.036102016126131335,
+                "log1p_tumor_volume_mm3": 0.6207684403077649
+              },
+              "harrell": {
+                "cindex": 0.827433628318584,
+                "concordant": 748,
+                "discordant": 156,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 904
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 381,
+                "g_train_at_horizon": 0.7540539817047598,
+                "cindex": 0.8083379509384601,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 2,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 51.92060232717317,
+                "log1p_tumor_volume_mm3": 7.908721616955783
+              },
+              "scaler_train_means": {
+                "age_mri_years": 52.86707528575031,
+                "log1p_tumor_volume_mm3": 7.8808884536872
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.192845659843398,
+                "log1p_tumor_volume_mm3": 1.5582182354284002
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": -0.027785138219616187,
+                "log1p_tumor_volume_mm3": 0.7084610535019816
+              },
+              "harrell": {
+                "cindex": 0.6739380022962113,
+                "concordant": 587,
+                "discordant": 284,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 871
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 374,
+                "g_train_at_horizon": 0.7415150595334811,
+                "cindex": 0.5842739937442094,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 3,
+              "train_patients": 532,
+              "test_patients": 133,
+              "train_events": 37,
+              "test_events": 10,
+              "imputer_train_medians": {
+                "age_mri_years": 53.14031485284052,
+                "log1p_tumor_volume_mm3": 7.846995861315696
+              },
+              "scaler_train_means": {
+                "age_mri_years": 53.15217201113667,
+                "log1p_tumor_volume_mm3": 7.880467194420321
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.49427605437878,
+                "log1p_tumor_volume_mm3": 1.5833369848698764
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": 0.02801241966760729,
+                "log1p_tumor_volume_mm3": 0.7161945536228367
+              },
+              "harrell": {
+                "cindex": 0.6925434116445353,
+                "concordant": 678,
+                "discordant": 301,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 979
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 382,
+                "g_train_at_horizon": 0.7529059328312774,
+                "cindex": 0.6687800027839667,
+                "unavailable_reason": null
+              }
+            },
+            {
+              "fold": 4,
+              "train_patients": 533,
+              "test_patients": 132,
+              "train_events": 38,
+              "test_events": 9,
+              "imputer_train_medians": {
+                "age_mri_years": 52.26557152635181,
+                "log1p_tumor_volume_mm3": 7.901805910049772
+              },
+              "scaler_train_means": {
+                "age_mri_years": 52.933997506141544,
+                "log1p_tumor_volume_mm3": 7.850806734942298
+              },
+              "scaler_train_scales": {
+                "age_mri_years": 11.162152245430205,
+                "log1p_tumor_volume_mm3": 1.563022241990238
+              },
+              "cox_coefficients_standardized": {
+                "age_mri_years": 0.11347545136693207,
+                "log1p_tumor_volume_mm3": 0.8870561686519278
+              },
+              "harrell": {
+                "cindex": 0.6043478260869565,
+                "concordant": 417,
+                "discordant": 273,
+                "tied_risk": 0,
+                "tied_time": 1,
+                "comparable_pairs": 690
+              },
+              "ipcw_3y": {
+                "horizon_days": 1095.75,
+                "train_at_risk_at_horizon": 380,
+                "g_train_at_horizon": 0.7546821839162238,
+                "cindex": 0.6452374154466689,
+                "unavailable_reason": null
+              }
+            }
+          ],
+          "aggregate": {
+            "harrell_within_fold_pairs": 0.6919582008178101,
+            "comparable_pairs": 4402,
+            "harrell_fold_mean": 0.6882538262788608,
+            "harrell_fold_range": [
+              0.6043478260869565,
+              0.827433628318584
+            ],
+            "ipcw_3y_fold_mean": 0.6658957018912355,
+            "ipcw_3y_available_folds": 5
+          }
+        }
+      }
+    }
+  },
+  "elapsed_seconds": 0.902645907999613
+}
