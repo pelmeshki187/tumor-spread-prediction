@@ -221,3 +221,6 @@ __marimo__/
 
 # macOS
 .DS_Store
+
+# Downloaded source data and patient-level derived tables
+/data/

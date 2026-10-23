@@ -1,0 +1,45 @@
+{
+  "dataset_doi": "10.7937/TCIA.e3sv-re93",
+  "files": [
+    {
+      "name": "Clinical_and_Other_Features.xlsx",
+      "url": "https://www.cancerimagingarchive.net/wp-content/uploads/Clinical_and_Other_Features.xlsx",
+      "bytes": 595608,
+      "sha256": "8ef0945c9f7513acd2d9c6e8866d98f2234dd78443110d9496c24a82dbbc7e6f"
+    },
+    {
+      "name": "Annotation_Boxes.xlsx",
+      "url": "https://www.cancerimagingarchive.net/wp-content/uploads/Annotation_Boxes.xlsx",
+      "bytes": 50224,
+      "sha256": "b7f84a2d48db700d69226ff1622f0e0eb2d98feb2005078d5a9e2658421cd466"
+    },
+    {
+      "name": "Imaging_Features.xlsx",
+      "url": "https://www.cancerimagingarchive.net/wp-content/uploads/Imaging_Features.xlsx",
+      "bytes": 6748361,
+      "sha256": "371e7aec937ccf7cff01bc3c66063ce22d9699d3d3f8c6ac0dcee6728826682d"
+    },
+    {
+      "name": "sample-series.json",
+      "url": "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSeries?Collection=Duke-Breast-Cancer-MRI&PatientID=Breast_MRI_001&format=json",
+      "bytes": 5422,
+      "sha256": "281911037bd8922937aa86943f4a30283f5daec32c982f10026fee1347eba40f"
+    },
+    {
+      "name": "sample-pre.zip",
+      "url": "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.185777849803665244536713316058283493877",
+      "bytes": 25265727,
+      "sha256": "7e72a1d6c60fbd478ea52f18d4f7a6ed40122265d973fc759a1ce42440f6ad12"
+    },
+    {
+      "name": "sample-post1.zip",
+      "url": "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.15147203499230039585785258602759759529",
+      "bytes": 26406818,
+      "sha256": "0c76635be861d12891a7cc6cc355ae9c8eee1dafcdd24410d49d612153838399"
+    }
+  ],
+  "software": {
+    "openpyxl": "3.1.5",
+    "pydicom": "3.0.1"
+  }
+}

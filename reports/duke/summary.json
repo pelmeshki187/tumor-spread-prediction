@@ -1,0 +1,156 @@
+{
+  "status": "provisional_audit_not_training_ready",
+  "clinical_patients": 922,
+  "sheets": {
+    "Data": {
+      "rows": 925,
+      "columns": 99
+    },
+    "Legend": {
+      "rows": 27,
+      "columns": 9
+    },
+    "Column Explanations": {
+      "rows": 4,
+      "columns": 103
+    }
+  },
+  "stage_m_counts": {
+    "0": 689,
+    "-1": 203,
+    "1": 30
+  },
+  "metastatic_at_presentation": 29,
+  "stage_m1_presentation_no": 1,
+  "numeric_distant_dates_all": 76,
+  "auxiliary": {
+    "Annotation_Boxes.xlsx": {
+      "columns": 6,
+      "non_numeric_cells": 0,
+      "incomplete_rows": 0,
+      "patients": 922,
+      "missing_clinical_ids": 0,
+      "extra_ids": 0
+    },
+    "Imaging_Features.xlsx": {
+      "columns": 529,
+      "non_numeric_cells": 547,
+      "incomplete_rows": 61,
+      "patients": 922,
+      "missing_clinical_ids": 0,
+      "extra_ids": 0
+    }
+  },
+  "strict_m0_provisional": {
+    "patients": 686,
+    "distant_events": 51,
+    "competing_deaths_observed": 2,
+    "median_endpoint_time_days": 1463.0,
+    "flags": {
+      "surgery_before_mri": 9,
+      "mri_before_diagnosis": 88,
+      "death_after_last_dr_free_assessment": 9,
+      "distant_date_conflicts_with_recurrence_flag": 3
+    },
+    "horizons_years": {
+      "1": {
+        "distant_recurrence": 6,
+        "competing_death": 0,
+        "observed_event_free": 634,
+        "early_censored": 46
+      },
+      "2": {
+        "distant_recurrence": 23,
+        "competing_death": 1,
+        "observed_event_free": 573,
+        "early_censored": 89
+      },
+      "3": {
+        "distant_recurrence": 34,
+        "competing_death": 1,
+        "observed_event_free": 482,
+        "early_censored": 169
+      },
+      "5": {
+        "distant_recurrence": 47,
+        "competing_death": 2,
+        "observed_event_free": 170,
+        "early_censored": 467
+      }
+    }
+  },
+  "strict_m0_after_outcome_qc": {
+    "patients": 674,
+    "distant_events": 47,
+    "competing_deaths_observed": 2,
+    "median_endpoint_time_days": 1464.5,
+    "flags": {
+      "mri_before_diagnosis": 85,
+      "death_after_last_dr_free_assessment": 9
+    },
+    "horizons_years": {
+      "1": {
+        "distant_recurrence": 5,
+        "competing_death": 0,
+        "observed_event_free": 624,
+        "early_censored": 45
+      },
+      "2": {
+        "distant_recurrence": 22,
+        "competing_death": 1,
+        "observed_event_free": 563,
+        "early_censored": 88
+      },
+      "3": {
+        "distant_recurrence": 30,
+        "competing_death": 1,
+        "observed_event_free": 475,
+        "early_censored": 168
+      },
+      "5": {
+        "distant_recurrence": 43,
+        "competing_death": 2,
+        "observed_event_free": 170,
+        "early_censored": 459
+      }
+    }
+  },
+  "extended_including_mx_provisional": {
+    "patients": 887,
+    "distant_events": 73,
+    "competing_deaths_observed": 3,
+    "median_endpoint_time_days": 1430,
+    "flags": {
+      "mri_before_diagnosis": 102,
+      "surgery_before_mri": 9,
+      "death_after_last_dr_free_assessment": 15,
+      "distant_date_conflicts_with_recurrence_flag": 3
+    },
+    "horizons_years": {
+      "1": {
+        "distant_recurrence": 14,
+        "competing_death": 0,
+        "observed_event_free": 795,
+        "early_censored": 78
+      },
+      "2": {
+        "distant_recurrence": 37,
+        "competing_death": 2,
+        "observed_event_free": 712,
+        "early_censored": 136
+      },
+      "3": {
+        "distant_recurrence": 50,
+        "competing_death": 2,
+        "observed_event_free": 589,
+        "early_censored": 246
+      },
+      "5": {
+        "distant_recurrence": 69,
+        "competing_death": 3,
+        "observed_event_free": 207,
+        "early_censored": 608
+      }
+    }
+  }
+}

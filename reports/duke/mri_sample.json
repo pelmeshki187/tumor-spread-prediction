@@ -1,0 +1,52 @@
+{
+  "pre": {
+    "patient_id": "Breast_MRI_001",
+    "series_uid": "1.3.6.1.4.1.14519.5.2.1.185777849803665244536713316058283493877",
+    "dicom_instances": 160,
+    "matrix": [
+      448,
+      448
+    ],
+    "median_slice_spacing_mm": 1.0999995788758845,
+    "orientation_and_pixel_spacing": [
+      0.999328,
+      -0.0,
+      0.036644,
+      0.0,
+      1.0,
+      0.0,
+      0.803571,
+      0.803571
+    ],
+    "first_file_pixel_range": [
+      0,
+      117
+    ]
+  },
+  "first_post": {
+    "patient_id": "Breast_MRI_001",
+    "series_uid": "1.3.6.1.4.1.14519.5.2.1.15147203499230039585785258602759759529",
+    "dicom_instances": 160,
+    "matrix": [
+      448,
+      448
+    ],
+    "median_slice_spacing_mm": 1.0999995788758845,
+    "orientation_and_pixel_spacing": [
+      0.999328,
+      -0.0,
+      0.036644,
+      0.0,
+      1.0,
+      0.0,
+      0.803571,
+      0.803571
+    ],
+    "first_file_pixel_range": [
+      0,
+      375
+    ]
+  },
+  "geometry_matches": true,
+  "scope": "one patient; no annotation overlay or cohort-wide quality guarantee"
+}
