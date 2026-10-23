@@ -77,39 +77,44 @@ Qwen 27b рассматривается как кандидат. Точное н
 
 ## Запуск
 
-Для текущего аудита достаточно CPU и Python 3.11+. Команды из корня проекта, окружение создаётся через [uv](https://docs.astral.sh/uv/):
+Для аудита и первых моделей достаточно CPU. Единый способ установки и запуска проекта — [uv](https://docs.astral.sh/uv/). Версия Python 3.12 указана в [.python-version](.python-version), прямые зависимости — в [pyproject.toml](pyproject.toml), точные версии и хеши пакетов — в [uv.lock](uv.lock).
+
+Все команды выполняются из корня проекта. Подготовка общего окружения для аудита, моделей и тестов:
 
 ```bash
-uv venv .venv
-uv pip install --python .venv/bin/python -r requirements.txt
-.venv/bin/python scripts/download_duke.py
-.venv/bin/python scripts/audit_duke.py
+uv sync --locked
+uv run --locked scripts/download_duke.py
+uv run --locked scripts/audit_duke.py
 ```
 
 Опционально скачать две серии одного пациента (около 50 МБ ZIP суммарно) и проверить чтение DICOM, пиксельные данные и геометрию:
 
 ```bash
-.venv/bin/python scripts/download_duke.py --sample-mri
-.venv/bin/python scripts/check_duke_mri.py
-.venv/bin/python scripts/audit_duke.py
+uv run --locked scripts/download_duke.py --sample-mri
+uv run --locked scripts/check_duke_mri.py
+uv run --locked scripts/audit_duke.py
 ```
 
 Проверки правил времён, исходов и цензурирования:
 
 ```bash
-.venv/bin/python -m unittest discover -s scripts -p 'test_duke_audit.py' -v
+uv run --locked python -m unittest discover -s scripts -p 'test_duke_audit.py' -v
 ```
 
-Для воспроизведения первых моделей используйте отдельное окружение Python 3.12. Оно проверено с готовыми бинарными пакетами на Linux; зависимость `ecos` не установилась без компилятора на Python 3.13/3.14:
+Подготовка таблиц и запуск первых моделей в том же окружении:
 
 ```bash
-uv venv --python 3.12 .venv-baseline
-uv pip install --python .venv-baseline/bin/python --only-binary :all: -r requirements-baseline.lock.txt
-.venv-baseline/bin/python scripts/prepare_duke_baseline.py
-.venv-baseline/bin/python scripts/run_duke_baseline.py
-.venv-baseline/bin/python -m unittest discover -s scripts -p 'test_*.py' -v
+uv run --locked scripts/prepare_duke_baseline.py
+uv run --locked scripts/run_duke_baseline.py
+uv run --locked python -m unittest discover -s scripts -p 'test_*.py' -v
 ```
 
-До подготовки таблиц скачайте исходные XLSX командой `scripts/download_duke.py` из раздела аудита. Подготовка пересчитывает отбор по исходным файлам; отдельный запуск аудита для неё не обязателен. Список прямых зависимостей моделей — `requirements-baseline.txt`, точные версии первого запуска — `requirements-baseline.lock.txt`.
+До подготовки таблиц скачайте исходные XLSX командой `scripts/download_duke.py` из раздела аудита. Подготовка пересчитывает отбор по исходным файлам; отдельный запуск аудита для неё не обязателен.
+
+`uv sync --locked` устанавливает зависимости в общее окружение `.venv`, а `uv run --locked` запускает команды в нём. Активация окружения вручную не требуется. Первый запуск может загрузить Python и зависимости. Python 3.12 выбран для совместимости пакетов моделей; на некоторых платформах для сборки `ecos` может потребоваться компилятор.
+
+Для добавления зависимостей используйте `uv add имя-пакета`, для обновления зафиксированных версий — `uv lock --upgrade`, затем `uv sync --locked` и тесты. Изменения `pyproject.toml` и `uv.lock` сохраняются в Git вместе.
+
+[Снимок окружения первого эксперимента](reports/duke/requirements-first-run.txt) на Linux / Python 3.12.15 хранится вместе с отчётом как историческая запись. Рабочее окружение проекта определяется `pyproject.toml` и `uv.lock`.
 
 Исходные данные и таблицы по пациентам сохраняются в игнорируемой Git папке `data/`. В `data/derived/duke/baseline/` отдельно лежат только разрешённые признаки, исходы, номера блоков и прогнозные баллы для пациентов, не участвовавших в обучении соответствующей модели. SHA-256 подготовленных файлов проверяются перед запуском расчёта. Агрегированные результаты и версии — в `reports/duke/baseline.md`, `baseline_inputs.json` и `baseline_results.json`. Команды пока выполняют кросс-валидацию; сохранённая модель для применения к новому пациенту не создаётся.

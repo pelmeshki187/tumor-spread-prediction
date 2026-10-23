@@ -1,2 +1,0 @@
--r requirements.txt
-scikit-survival==0.28.0

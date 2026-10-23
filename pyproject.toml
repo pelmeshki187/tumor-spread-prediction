@@ -1,0 +1,17 @@
+[project]
+name = "tumor-spread-prediction"
+version = "0.1.0"
+description = "Longitudinal oncology data research and Duke MRI baseline experiments"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy==2.5.4",
+    "openpyxl==3.1.5",
+    "pandas==3.1.0",
+    "pydicom==3.0.1",
+    "scikit-learn==1.9.1",
+    "scikit-survival==0.28.0",
+]
+
+[tool.uv]
+package = false
