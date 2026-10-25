@@ -1,0 +1,99 @@
+{
+  "baseline": {
+    "status": "exploratory_cause_specific_ranking_only",
+    "seed": 20261023,
+    "n_folds": 5,
+    "patients": 674,
+    "distant_events": 47,
+    "feature_allowlist": [
+      "age_mri_years",
+      "log1p_tumor_volume_mm3"
+    ],
+    "volume_source_column": "Volume_cu_mm_Tumor",
+    "volume_unit": "mm^3 as labelled by publisher; not independently recomputed",
+    "volume": {
+      "observed": 673,
+      "missing": 1,
+      "minimum": 25.0775091,
+      "median": 2627.567047072,
+      "maximum": 158651.256304232
+    },
+    "age_range_years": [
+      21.809719370294317,
+      89.46475017111567
+    ],
+    "source_sha256": {
+      "Clinical_and_Other_Features.xlsx": "8ef0945c9f7513acd2d9c6e8866d98f2234dd78443110d9496c24a82dbbc7e6f",
+      "Imaging_Features.xlsx": "371e7aec937ccf7cff01bc3c66063ce22d9699d3d3f8c6ac0dcee6728826682d"
+    },
+    "prepared_sha256": {
+      "features.csv": "5fce65e933d30c276353222a1a4e9fac9fd70c91596f66cdbde14c736d6dd43c",
+      "outcomes.csv": "fd492cee6fb3190a359437b5766ec9e699512b85d9c59e708203e44aeca89d47",
+      "folds.csv": "02fc3078d89515c16fd9978e7d3ea4b1cf75e68d634ffbf89317c8f30e427c38"
+    },
+    "folds": [
+      {
+        "fold": 0,
+        "patients": 135,
+        "distant_events": 9,
+        "distant_events_before_3y": 6
+      },
+      {
+        "fold": 1,
+        "patients": 135,
+        "distant_events": 9,
+        "distant_events_before_3y": 7
+      },
+      {
+        "fold": 2,
+        "patients": 135,
+        "distant_events": 10,
+        "distant_events_before_3y": 5
+      },
+      {
+        "fold": 3,
+        "patients": 135,
+        "distant_events": 10,
+        "distant_events_before_3y": 8
+      },
+      {
+        "fold": 4,
+        "patients": 134,
+        "distant_events": 9,
+        "distant_events_before_3y": 4
+      }
+    ],
+    "source_definitions": [
+      "https://www.nature.com/articles/s41416-018-0185-8",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6176866/"
+    ],
+    "missing_value_policy": "No global imputation; training-fold median after log1p",
+    "selection": "strict M0, positive follow-up, no blocking outcome/surgery flags"
+  },
+  "source_sha256": "371e7aec937ccf7cff01bc3c66063ce22d9699d3d3f8c6ac0dcee6728826682d",
+  "panel": [
+    "log1p_tumor_volume_mm3",
+    "Median_solidity_Tumor",
+    "Median_Elongation_Tumor",
+    "Entropy_Tumor",
+    "Homogeneity1_Tumor",
+    "Max_Enhancement_from_char_curv",
+    "Time_to_Peak_from_char_curv",
+    "Uptake_rate_from_char_curv",
+    "Washout_rate_from_char_curv"
+  ],
+  "patients": 674,
+  "missing_by_feature": {
+    "log1p_tumor_volume_mm3": 1,
+    "Median_solidity_Tumor": 0,
+    "Median_Elongation_Tumor": 0,
+    "Entropy_Tumor": 0,
+    "Homogeneity1_Tumor": 0,
+    "Max_Enhancement_from_char_curv": 0,
+    "Time_to_Peak_from_char_curv": 0,
+    "Uptake_rate_from_char_curv": 0,
+    "Washout_rate_from_char_curv": 0
+  },
+  "rationale_sha256": "2ee70c85e248032812a97e93a0bf2b5b2b1f96df95711ac59ae7a335df93d99e",
+  "prepared_sha256": "a31eefc89539207ed8f7edb2187c157635b14647269cc0e04b1aa11bf7af1176"
+}
