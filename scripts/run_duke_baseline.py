@@ -129,12 +129,17 @@ def aggregate_folds(rows):
         "ipcw_3y_available_folds": sum(v is not None for v in ipcw)}
 
 
-def evaluate_scenario(features, outcomes, folds, selected, name):
+def evaluate_scenario(features, outcomes, folds, selected, name, *,
+                      models=None, model_factory=None, score_field="linear_predictor"):
+    models = MODELS if models is None else models
+    if not models or any(not columns or not set(columns) <= set(FEATURES)
+                         for columns in models.values()):
+        raise ValueError("Models must use nonempty subsets of the feature allowlist")
     n = int(np.sum(selected))
     scenario = {"name": name, "patients": n,
         "distant_events": int(np.sum(selected & (outcomes["event_type"] == 1))), "models": {}}
     predictions = []
-    for model_name, columns in MODELS.items():
+    for model_name, columns in models.items():
         fold_results = []
         for fold in range(N_FOLDS):
             train = np.asarray(selected & (folds != fold))
@@ -144,29 +149,31 @@ def evaluate_scenario(features, outcomes, folds, selected, name):
             y_test = Surv.from_arrays(test_outcome["event_type"] == 1, test_outcome["time_days"])
             if not y_train["event"].any() or not y_test["event"].any():
                 raise ValueError("Every training/test subset needs observed distant events")
-            model = make_model()
+            model = make_model() if model_factory is None else model_factory(model_name)
             with warnings.catch_warnings():
                 warnings.simplefilter("error", ConvergenceWarning)
                 model.fit(features.iloc[train][columns], y_train)
             scores = model.predict(features.iloc[test][columns])
             if not np.isfinite(scores).all():
                 raise ValueError("Non-finite held-out scores")
-            imputer, scaler, cox = model.steps[0][1], model.steps[1][1], model.steps[2][1]
-            fold_results.append({"fold": fold, "train_patients": int(train.sum()),
+            imputer, scaler, estimator = (step[1] for step in model.steps)
+            diagnostics = {"fold": fold, "train_patients": int(train.sum()),
                 "test_patients": int(test.sum()), "train_events": int(y_train["event"].sum()),
                 "test_events": int(y_test["event"].sum()),
                 "imputer_train_medians": dict(zip(columns, imputer.statistics_.tolist())),
                 "scaler_train_means": dict(zip(columns, scaler.mean_.tolist())),
                 "scaler_train_scales": dict(zip(columns, scaler.scale_.tolist())),
-                "cox_coefficients_standardized": dict(zip(columns, cox.coef_.tolist())),
                 "harrell": harrell_metrics(y_test, scores),
-                "ipcw_3y": ipcw_metrics(y_train, y_test, scores)})
+                "ipcw_3y": ipcw_metrics(y_train, y_test, scores)}
+            if isinstance(estimator, CoxPHSurvivalAnalysis):
+                diagnostics["cox_coefficients_standardized"] = dict(zip(columns, estimator.coef_.tolist()))
+            fold_results.append(diagnostics)
             for patient_id, score in zip(features.index[test], scores):
                 predictions.append({"patient_id": patient_id, "scenario": name,
-                    "model": model_name, "fold": fold, "linear_predictor": float(score)})
+                    "model": model_name, "fold": fold, score_field: float(score)})
         scenario["models"][model_name] = {"features": columns, "folds": fold_results,
                                          "aggregate": aggregate_folds(fold_results)}
-    expected = n * len(MODELS)
+    expected = n * len(models)
     keys = {(r["patient_id"], r["model"]) for r in predictions}
     if len(predictions) != expected or len(keys) != expected:
         raise ValueError("Each patient must have exactly one held-out score per model")
